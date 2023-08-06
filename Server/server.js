@@ -127,7 +127,7 @@ io.on('connection', (socket) => {
 // -------------------------------------------------------
 
 const saltRounds = 10;
-const db = pgp('postgres://postgres:admin@localhost:5432/social_space')
+// const db = pgp('postgres://postgres:admin@localhost:5432/social_space')
 
 // ---STORAGE--------------------------
 
