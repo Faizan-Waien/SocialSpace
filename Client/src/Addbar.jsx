@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { add1 } from "./Adds"
-import ChatBox from "./Chatbox";
+import ChatBox from "./ChatBox"
 
 const Addbar = () => {
 
