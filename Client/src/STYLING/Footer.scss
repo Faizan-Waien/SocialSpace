@@ -1,0 +1,37 @@
+    .footer {
+        text-align: center;
+        background-color: white;
+        padding: 0px 0px;
+        width: 100%;
+        box-shadow: black 0px 0px 5px 0px;
+        box-sizing: border-box;
+    }
+
+    .footer .row {
+        width: 100%;
+        padding: 10px 0px;
+        color: black;
+        font-size: 1em;
+    }
+
+    .footer .row a {
+        text-decoration: none;
+        color: #0a0a87;
+        font-weight: bold;
+        transition: 0.5s;
+        cursor: pointer;
+    }
+
+    .footer .row a:hover {
+        color: #6771c0;
+    }
+
+    .footer .row li {
+        display: inline-block;
+        margin: 0px 30px;
+    }
+
+    .row img {
+        width: 150px;
+        height: auto;
+    }

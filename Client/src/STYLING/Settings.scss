@@ -1,0 +1,139 @@
+.settingmain {
+    display: flex;
+    flex-direction: column;
+
+    .tab {
+        width: 100px;
+        height: 30px;
+        border: transparent;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        transition: 0.5s;
+        font-family: Rajdhani;
+        font-size: large;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    h2 {
+        margin: 5px;
+        color: white;
+    }
+}
+
+// ------------------------------------------
+.mainS {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 50px 50px;
+    width: 100%;
+
+    button {
+        border: transparent;
+        float: right;
+        background: #0a0a87;
+        font-weight: bold;
+        padding: 5px;
+        transition: 0.5s;
+        cursor: pointer;
+        width: 60px;
+
+        &:hover {
+            background: #555e9f;
+        }
+    }
+
+    .mainS1 {
+        display: flex;
+        flex-direction: row;
+
+        form {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+
+            img {
+                width: 350px;
+                height: 450px;
+                border-radius: 10px;
+                object-fit: fill;
+                background: black;
+            }
+
+            label{
+                display: flex;
+                align-items: center;
+                position: absolute;
+                top:0;
+                right: 0;
+            }
+
+            button{
+                position: absolute;
+                top: 50%;
+                left: 25%;
+                width: 200px;
+                height: 50px;
+                border-radius: 25px;
+            }
+        }
+
+        .main1 {
+
+            form {
+                display: flex;
+                flex-direction: column;
+                margin: 20px 20px;
+                gap: 20px;
+            }
+        }
+    }
+}
+
+// ----------------------------------------------
+
+.PriSet {
+    display: flex;
+    flex-direction: column;
+    margin: 50px;
+    width: 100%;
+    gap: 50px;
+
+    .pri1 {
+        display: flex;
+        flex-direction: column;
+        box-shadow: black 0px 0px 5px 0px;
+        padding: 20px;
+        gap: 20px;
+        width: 600px;
+
+        h3 {
+            margin: 0;
+            color: #0a0a87;
+            border-bottom: 1px solid grey;
+        }
+
+        h5 {
+            margin: 0 auto;
+            background: #030819;
+            border-radius: 5px;
+            color: white;
+            padding: 0px 5px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        button {
+            background: #0a0a87;
+            border: transparent;
+            padding: 10px;
+        }
+    }
+}
+
+// -----------------------------------------------
