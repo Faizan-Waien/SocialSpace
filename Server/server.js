@@ -189,23 +189,23 @@ app.use(appRouter)
 appRouter.use(jwtMiddleware)
 
 // -----------------------------------------------
-app.get('/user-socket-map/:userid', (req, res) => {
-  const userid = req.params.userid
+// app.get('/user-socket-map/:userid', (req, res) => {
+//   const userid = req.params.userid
 
-  const userSocketMapData = userSocketMap
+//   const userSocketMapData = userSocketMap
 
-  db.manyOrNone("SELECT users.id, friends.* FROM public.users JOIN public.friends ON users.id = friends.id_friend WHERE friends.id_user = $1", [userid])
-    .then((data) => {
-      // console.log('user-friends',data)
-      const online = userSocketMapData.filter((user) => data.some((friend) => friend.id == user.id))
-      // console.log('socket-filtered',online)
-      res.json(online)
+//   db.manyOrNone("SELECT users.id, friends.* FROM public.users JOIN public.friends ON users.id = friends.id_friend WHERE friends.id_user = $1", [userid])
+//     .then((data) => {
+//       // console.log('user-friends',data)
+//       const online = userSocketMapData.filter((user) => data.some((friend) => friend.id == user.id))
+//       // console.log('socket-filtered',online)
+//       res.json(online)
 
-    }).catch((err) => {
-      res.sendStatus(400)
-      console.log(err)
-    })
-});
+//     }).catch((err) => {
+//       res.sendStatus(400)
+//       console.log(err)
+//     })
+// });
 
 // --------posts Route-------------------------
 
@@ -242,7 +242,7 @@ app.get('/', (req, res) => {
 })
 
 
-appRouter.get('/posts/:userid', (req, res) => {
+/*appRouter.get('/posts/:userid', (req, res) => {
   const userid = req.params.userid;
 
   db.task((t) => {
@@ -981,7 +981,7 @@ appRouter.get('/search', (req, res) => {
       console.log(error);
     });
 });
-
+*/
 // -----------------------------------------------------
 
 const port = 3000
