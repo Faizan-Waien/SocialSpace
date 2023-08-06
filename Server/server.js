@@ -11,6 +11,10 @@ const path = require('path')
 const { createServer } = require('http')
 const { Server } = require('socket.io')
 
+const db = pgp('postgres://postgres:admin@localhost:5432/social_space')
+
+// ------Sockets------------------------------------------------------
+
 const server = createServer(app)
 
 const io = new Server(server, {
@@ -20,18 +24,14 @@ const io = new Server(server, {
 })
 
 const userSocketMap = [];
-// const userSocketMap = new Map();
 
 io.on('connection', (socket) => {
   // console.log('A user connected', socket.id);
-
 
   socket.on('join_private_chat', (data) => {
     const { room, id, profilepic, fullname } = data
     socket.join(room)
     // console.log('user_joined', id);
-
-    // userSocketMap.set(userId, socket.id);
 
     const existingUser = userSocketMap.find((entry) => entry.id === id);
     if (existingUser) {
@@ -39,7 +39,6 @@ io.on('connection', (socket) => {
     } else {
       userSocketMap.push({ id, socketId: socket.id, profilepic, fullname });
     }
-
     // console.log('map', userSocketMap);
 
   })
@@ -47,7 +46,6 @@ io.on('connection', (socket) => {
   socket.on('send_private_message', (data) => {
     const { room, recipientId, sender, message, senderId } = data;
 
-    // const recipientSocketId = userSocketMap.get(recipientId);
     const recipientEntry = userSocketMap.find((entry) => entry.id === recipientId);
     if (recipientEntry) {
       const recipientSocketId = recipientEntry.socketId;
@@ -63,31 +61,6 @@ io.on('connection', (socket) => {
     }
   })
 
-  // socket.on('send_friend_request', (data) => {
-  //   const { alert, receiverID, senderID } = data;
-  //   console.log(data)
-
-  //   db.none('INSERT INTO public.notifications (receiver_id, sender_id, message) VALUES ($1, $2, $3)', [receiverID, senderID, alert])
-  //   .then(() => {
-  //     console.log('Alert message stored in the database');
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error storing alert message:', error);
-  //   });
-
-  //   const recipientEntry = userSocketMap.find((entry) => entry.id === recieverID);
-  //   if (recipientEntry) {
-  //     const recipientSocketId = recipientEntry.socketId;
-
-  //   socket.to(recipientSocketId).emit('receive_friend_request', {
-  //     alert: alert
-  //   })
-  // }
-  //   socket.to('ChatRoom').emit('receive_friend_request', {
-  //     alert: alert
-  //   })
-  // })
-
   socket.on('send_notification', (data) => {
     const { alert, receiverID, senderID } = data;
     // console.log(data)
@@ -101,17 +74,10 @@ io.on('connection', (socket) => {
         alert: alert
       })
     }
-
   })
 
   socket.on('disconnect', () => {
     // console.log('User disconnected:', socket.id);
-
-    // userSocketMap.forEach((socketId, userId) => {
-    //   if (socketId === socket.id) {
-    //     userSocketMap.delete(userId);
-    //   }
-    // })
 
     const disconnectedSocketId = socket.id;
     const index = userSocketMap.findIndex((entry) => entry.socketId === disconnectedSocketId);
@@ -124,12 +90,9 @@ io.on('connection', (socket) => {
 
 })
 
-// -------------------------------------------------------
+// ---STORAGE------------------------------------------------------
 
 const saltRounds = 10;
-// const db = pgp('postgres://postgres:admin@localhost:5432/social_space')
-
-// ---STORAGE--------------------------
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -163,7 +126,7 @@ const storage3 = multer.diskStorage({
 });
 
 const uploadPB = multer({ storage: storage3 });
-// ----------------------------
+// -----------------------------------
 
 app.use(cors())
 
@@ -188,24 +151,25 @@ app.use(appRouter)
 
 appRouter.use(jwtMiddleware)
 
-// -----------------------------------------------
-// app.get('/user-socket-map/:userid', (req, res) => {
-//   const userid = req.params.userid
+// -------Socket Users Joined----------------------------------------
 
-//   const userSocketMapData = userSocketMap
+appRouter.get('/user-socket-map/:userid', (req, res) => {
+  const userid = req.params.userid
 
-//   db.manyOrNone("SELECT users.id, friends.* FROM public.users JOIN public.friends ON users.id = friends.id_friend WHERE friends.id_user = $1", [userid])
-//     .then((data) => {
-//       // console.log('user-friends',data)
-//       const online = userSocketMapData.filter((user) => data.some((friend) => friend.id == user.id))
-//       // console.log('socket-filtered',online)
-//       res.json(online)
+  const userSocketMapData = userSocketMap
 
-//     }).catch((err) => {
-//       res.sendStatus(400)
-//       console.log(err)
-//     })
-// });
+  db.manyOrNone("SELECT users.id, friends.* FROM public.users JOIN public.friends ON users.id = friends.id_friend WHERE friends.id_user = $1", [userid])
+    .then((data) => {
+      // console.log('user-friends',data)
+      const online = userSocketMapData.filter((user) => data.some((friend) => friend.id == user.id))
+      // console.log('socket-filtered',online)
+      res.json(online)
+
+    }).catch((err) => {
+      res.sendStatus(400)
+      console.log(err)
+    })
+});
 
 // --------posts Route-------------------------
 
@@ -237,12 +201,8 @@ appRouter.use(jwtMiddleware)
 // })
 
 // --------------------------------------------
-app.get('/', (req, res) => {
-  res.send('Hello, Vercel!')
-})
 
-
-/*appRouter.get('/posts/:userid', (req, res) => {
+appRouter.get('/posts/:userid', (req, res) => {
   const userid = req.params.userid;
 
   db.task((t) => {
@@ -492,18 +452,6 @@ appRouter.post('/likes', (req, res) => {
 })
 
 // -----editpost Route-------------------------------------
-
-// appRouter.get('/editpost', (req, res) => {
-//   db.manyOrNone(
-//     `SELECT * FROM public.posts ORDER BY id DESC`)
-//     .then((data) => {
-//       res.json(data)
-//       console.log(data)
-//     }).catch((error) => {
-//       res.sendStatus(400)
-//       console.log(error)
-//     })
-// })
 
 appRouter.put('/editpost', (req, res) => {
   const body = req.body
@@ -981,33 +929,11 @@ appRouter.get('/search', (req, res) => {
       console.log(error);
     });
 });
-*/
+
 // -----------------------------------------------------
 
 const port = 3000
 
-// server.listen(3001,()=>{
-//   console.log('Serveris Running')
-// })
-
 server.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-
-//return t.map('SELECT * FROM public.posts ORDER BY id DESC', [], post => {
-  //return t.any('SELECT * FROM public.comments WHERE post_id = $1 ORDER BY id DESC', [post.id])
-
-  // db.manyOrNone(`SELECT * FROM public.posts ORDER BY id DESC`)
-
-  // db.manyOrNone(
-  //   "SELECT * FROM public.posts as posts\
-  //   LEFT JOIN public.comments as comments\
-  //   ON comments.post_id = posts.id;"
-  // )
-  //   .then((data) => {
-  //     res.json(data)
-  //   })
-  //   .catch((error) => {
-  //     console.log('ERROR:', error)
-  //     res.sendStatus(400).statusMessage(error)
-  //   })
