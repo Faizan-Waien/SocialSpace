@@ -237,6 +237,10 @@ app.get('/user-socket-map/:userid', (req, res) => {
 // })
 
 // --------------------------------------------
+app.get('/', (req, res) => {
+  res.send('Hello, Vercel!')
+})
+
 
 appRouter.get('/posts/:userid', (req, res) => {
   const userid = req.params.userid;
