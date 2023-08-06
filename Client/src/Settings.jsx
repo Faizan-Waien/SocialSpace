@@ -1,5 +1,5 @@
 import './STYLING/Settings.scss'
-import PrivacySettings from './privacySettings'
+import PrivacySettings from './PrivacySettings'
 import ProfileSettings from './ProfileSettings'
 
 const Settings = () => {
