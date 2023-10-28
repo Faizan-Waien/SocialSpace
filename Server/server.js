@@ -13,6 +13,31 @@ const { Server } = require('socket.io')
 
 const db = pgp('postgres://postgres:admin@localhost:5432/social_space')
 
+// -----------------------------------
+
+app.use(cors())
+
+app.use('/public', express.static('public'))
+
+app.use(express.json())
+
+const jwtMiddleware = (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(' ')[1]
+
+    const decoded = jwt.verify(token, 'social')
+    req.user = decoded;
+    next()
+  } catch (err) {
+    res.sendStatus(401)
+  }
+}
+
+app.use(authRouter)
+app.use(appRouter)
+
+appRouter.use(jwtMiddleware)
+
 // ------Sockets------------------------------------------------------
 
 const server = createServer(app)
@@ -126,30 +151,6 @@ const storage3 = multer.diskStorage({
 });
 
 const uploadPB = multer({ storage: storage3 });
-// -----------------------------------
-
-app.use(cors())
-
-app.use('/public', express.static('public'))
-
-app.use(express.json())
-
-const jwtMiddleware = (req, res, next) => {
-  try {
-    const token = req.headers.authorization.split(' ')[1]
-
-    const decoded = jwt.verify(token, 'social')
-    req.user = decoded;
-    next()
-  } catch (err) {
-    res.sendStatus(401)
-  }
-}
-
-app.use(authRouter)
-app.use(appRouter)
-
-appRouter.use(jwtMiddleware)
 
 // -------Socket Users Joined----------------------------------------
 

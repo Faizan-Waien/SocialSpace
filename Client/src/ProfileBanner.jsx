@@ -147,7 +147,7 @@ const ProfileBanner = ({ profileid, userid }) => {
                                     }
                                 </div>
 
-                                <span style={{ height: 100, padding: '5px 5px', boxShadow: 'black 0px 0px 10px 0px' }}> {p?.about} </span>
+                                <span style={{ height: 100, padding: '5px 5px', background:'whitesmoke'/* , boxShadow: 'black 0px 0px 10px 0px' */ }}> {p?.about} </span>
 
                                 <div style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
 

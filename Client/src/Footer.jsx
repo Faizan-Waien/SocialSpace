@@ -6,10 +6,6 @@ const Footer = () => {
   <div className="footer">
 
     <div className="row">
-        <img src="/src/assets/sm.png"/>
-    </div>
-
-    <div className="row">
         
             <li><a>Contact us</a></li>
             <li><a>Our Services</a></li>

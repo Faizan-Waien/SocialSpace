@@ -1,15 +1,18 @@
     .footer {
+        display: flex;
+        flex-direction: column;
         text-align: center;
         background-color: white;
         padding: 0px 0px;
         width: 100%;
         box-shadow: black 0px 0px 5px 0px;
         box-sizing: border-box;
+        z-index: 999;
     }
 
     .footer .row {
         width: 100%;
-        padding: 10px 0px;
+        padding: 2px 0px;
         color: black;
         font-size: 1em;
     }
